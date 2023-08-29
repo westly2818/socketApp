@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Socket.IO Chat</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+</head>
+
+<body>
+    <form id="nameForm">
+        <label for="name">Enter your name:</label>
+        <input type="text" id="nameInput" required>
+        <button type="submit1">Submit</button>
+    </form>
+    <form id="form" action="">
+        <input id="input" autocomplete="off" /><button>Send</button>
+    </form>
+    <p>Your name: <span id="displayName"></span></p>
+    <ul id="messages"></ul>
+
+    <script>
+        let ip = ''
+        fetch('https://api.ipify.org?format=json')
+            .then(response => response.json())
+            .then(data => {
+                ip = data.ip;
+            })
+            .catch(error => {
+                console.error('Error fetching IP address:', error);
+            });
+        const socket = io('http://192.168.1.186:4000'); // Connect to the server
+
+        const form = document.getElementById('form');
+        const input = document.getElementById('input');
+        const messages = document.getElementById('messages');
+        const nameForm = document.getElementById('nameForm');
+        const nameInput = document.getElementById('nameInput');
+        const displayName = document.getElementById('displayName');
+
+        nameForm.addEventListener('submit1', function (e) {
+            e.preventDefault();
+            displayName.textContent = nameInput.value;
+            // nameInput.value = '';
+        });
+
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (input.value) {
+                let mes = { "message": input.value, "ip": ip }
+                // Emit a 'chat message' event to the server
+                socket.emit('message', mes);
+                input.value = '';
+            }
+        });
+
+        // Listen for 'chat message' event from the server
+        socket.on('message', (message) => {
+            const li = document.createElement('li');
+            li.textContent = message;
+            messages.appendChild(li);
+        });
+    </script>
+</body>
+
+</html>
