@@ -7,15 +7,10 @@
 </head>
 
 <body>
-    <form id="nameForm">
-        <label for="name">Enter your name:</label>
-        <input type="text" id="nameInput" required>
-        <button type="submit1">Submit</button>
-    </form>
+   
     <form id="form" action="">
         <input id="input" autocomplete="off" /><button>Send</button>
     </form>
-    <p>Your name: <span id="displayName"></span></p>
     <ul id="messages"></ul>
 
     <script>
@@ -28,21 +23,12 @@
             .catch(error => {
                 console.error('Error fetching IP address:', error);
             });
-        const socket = io('http://192.168.1.186:4000'); // Connect to the server
+        const socket = io('http://192.168.0.105:4000'); // Connect to the server
 
         const form = document.getElementById('form');
         const input = document.getElementById('input');
         const messages = document.getElementById('messages');
-        const nameForm = document.getElementById('nameForm');
-        const nameInput = document.getElementById('nameInput');
-        const displayName = document.getElementById('displayName');
-
-        nameForm.addEventListener('submit1', function (e) {
-            e.preventDefault();
-            displayName.textContent = nameInput.value;
-            // nameInput.value = '';
-        });
-
+  
 
         form.addEventListener('submit', (e) => {
             e.preventDefault();
